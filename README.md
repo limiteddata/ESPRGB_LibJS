@@ -9,7 +9,7 @@ It creates the websocket connection required, it parses all the messages, emits 
 ```
 <script src="./ESPRGB_LibJS.js" ></script>
 or
-const ESPRGB = require("ESPRGB_LibJS.js")
+const ESPRGB = require("esprgb_libjs")
 ```
 
 ## Usage
