@@ -1,5 +1,5 @@
 {
-  "name": "esprgb_libjs",
+  "name": "@limiteddata/esprgb_libjs",
   "version": "1.0.2",
   "description": "This is a library to create ESPRGB clients",
   "main": "ESPRGB_LibJS.js",
