@@ -1,0 +1,118 @@
+<html>
+    <head></head>
+    <body>
+        <button onclick="myDevice.ConnectToggle()">Connect</button>
+        <button onclick="myDevice.restart()">restart</button>
+        <button onclick="myDevice.format()">format</button>
+        <button onclick="myDevice.removeUserData()">remove user data</button>
+        <p>Connected:  <b id='Connected'></b></p>
+        <p>RSSI:  <b id='signalStrenght'></b></p>
+        <p>Playing:  <b id='playingAnimation'></b></p>
+        <p>Version:  <b id='ESPRGB-Version'></b></p>
+        <input id='powerConnected' type="checkbox" oninput="myDevice.powerConnectedToggle()">powerConnected</input> 
+        <div style=' display:block '>
+            <b>Solid Color</b>
+            <button onclick="myDevice.setAnimation('Solid Color')">Solid Color</button>
+            <p>Color</p>
+            <p>R</p>
+            <input id='SolidColorR' type="range" min="0" max="255" oninput="myDevice.SolidColor.setRGBColor(this.value,document.getElementById('SolidColorG').value,document.getElementById('SolidColorB').value) "/>
+            <p>G</p>
+            <input id='SolidColorG' type="range" min="0" max="255" oninput="myDevice.SolidColor.setRGBColor(document.getElementById('SolidColorR').value,this.value,document.getElementById('SolidColorB').value)"/>
+            <p>B</p>
+            <input id='SolidColorB' type="range" min="0" max="255" oninput="myDevice.SolidColor.setRGBColor(document.getElementById('SolidColorR').value,document.getElementById('SolidColorG').value,this.value)"/>
+            <p>Brightness</p>
+            <input id='SolidColor_Brightness' type="range" min="0" max="100" oninput="myDevice.SolidColor.setBrightness(this.value/100)" />
+            <button onclick="myDevice.SolidColor.powerButtonToggle()">ON/OFF</button>
+        </div>
+        <div style=' display:block '>
+            <b>Color Cycle</b>
+            <button onclick="myDevice.setAnimation('Color Cycle')">Color Cycle</button>
+            <p>Speed</p>
+            <input id='ColorCycle_speed' type="range" min="0" max="200" oninput="myDevice.ColorCycle.setSpeed(this.value)" />
+        </div>
+        <div style=' display:block '>
+            <p>Breathing</b>
+            <button onclick="myDevice.setAnimation('Breathing')">Breathing</button>
+            <p>Speed</p>
+            <input id='Breathing_speed' type="range" min="0" max="200" oninput="myDevice.Breathing.setSpeed(this.value)" />
+            <i>useColorList</i>
+            <input id='Breathing_useColorList' type="checkbox" oninput="myDevice.Breathing.setUseColorList(this.checked)" />
+            <p>R</p>
+            <input id='bstatic_colorR' type="range" min="0" max="255" oninput="myDevice.Breathing.setRGBColor(this.value,document.getElementById('bstatic_colorG').value,document.getElementById('bstatic_colorB').value) "/>
+            <p>G</p>
+            <input id='bstatic_colorG' type="range" min="0" max="255" oninput="myDevice.Breathing.setRGBColor(document.getElementById('bstatic_colorR').value,this.value,document.getElementById('bstatic_colorB').value) "/>
+            <p>B</p>
+            <input id='bstatic_colorB' type="range" min="0" max="255" oninput="myDevice.Breathing.setRGBColor(document.getElementById('bstatic_colorR').value,document.getElementById('bstatic_colorG').value,this.value) "/>
+            <button onclick="myDevice.Breathing.addColortoList(document.getElementById('bstatic_colorR').value,document.getElementById('bstatic_colorG').value,document.getElementById('bstatic_colorB').value);">+</button>
+            <button onclick="myDevice.Breathing.removeLastfromList();">-</button>
+            <button onclick="myDevice.Breathing.clearList();">C</button>
+        </div>
+
+        <div style=' display:block '>
+            <b>Morse Code</b>
+            <button onclick="myDevice.setAnimation('Morse Code')">Morse Code</button>
+            <p>Speed</p>
+            <input id='MorseCode_speed' type="range" min="35" max="550" oninput="myDevice.MorseCode.setSpeed(this.value)" />
+            <i>Usebuzzer</i>
+            <input id='useBuzzer' type="checkbox" oninput="myDevice.MorseCode.setUseBuzzer(this.checked)" />
+            <p>Color</p>
+            <p>R</p>
+            <input id='morse_colorR' type="range" min="0" max="255" oninput="myDevice.MorseCode.setRGBColor(this.value,document.getElementById('morse_colorG').value,document.getElementById('morse_colorG').value) "/>
+            <p>G</p>
+            <input id='morse_colorG' type="range" min="0" max="255" oninput="myDevice.MorseCode.setRGBColor(document.getElementById('morse_colorR').value,this.value,document.getElementById('morse_colorB').value) "/>
+            <p>B</p>
+            <input id='morse_colorB' type="range" min="0" max="255" oninput="myDevice.MorseCode.setRGBColor(document.getElementById('morse_colorR').value,document.getElementById('morse_colorG').value,this.value) "/>
+
+            <p style="margin:10px 0px 5px 0px;">Plain message:</p>
+            <textarea id="morsePlainText" style="resize:none; background-color: #152036; color:white; border: 1px solid #5e5e5e;text-transform: lowercase; font-size:10pt;" rows="5" cols="50" maxlength="75" oninput="document.getElementById('encodedMsgResult').value = myDevice.MorseCode.setText(this.value); "></textarea>
+            <p style="margin:10px 0px 5px 0px;">Encoded message:</p>
+            <textarea id="encodedMsgResult" style="resize:none; background-color: #152036; color:white; border: 1px solid #5e5e5e; font-size:10pt;" rows="5" cols="50" readonly></textarea>
+        </div>
+        <script src="./ESPRGB_LibJS.js" ></script>
+        <script>
+            var myDevice = new ESPRGB('esprgb-test.local');
+            // events
+            myDevice.SolidColor.on('Color:change', (e)=>{
+                document.getElementById("SolidColorR").value = e.Color[0];
+                document.getElementById("SolidColorG").value = e.Color[1];
+                document.getElementById("SolidColorB").value = e.Color[2];
+            });
+            myDevice.SolidColor.on('powerButton:change', (e)=> console.log('Power:',e.powerButton) );
+            myDevice.SolidColor.on('Brightness:change', (e)=> document.getElementById('SolidColor_Brightness').value = e.Brightness*100 );
+            myDevice.ColorCycle.on('Speed:change', (e)=>  document.getElementById('ColorCycle_speed').value = e.Speed );
+            myDevice.Breathing.on('Speed:change', (e)=> document.getElementById('Breathing_speed').value = e.Speed );
+            myDevice.Breathing.on('useColorList:change', (e)=> document.getElementById('Breathing_useColorList').checked = e.useColorList );  
+            myDevice.Breathing.on('StaticColor:change', (e)=> {
+                document.getElementById("bstatic_colorR").value = e.StaticColor[0];
+                document.getElementById("bstatic_colorG").value = e.StaticColor[1];
+                document.getElementById("bstatic_colorB").value = e.StaticColor[2];
+            });
+            myDevice.Breathing.on('colorList:change', (e)=> console.log('Breathing colorlist', e.colorList));
+            myDevice.MorseCode.on('Speed:change', (e)=> document.
+            getElementById('MorseCode_speed').value = e.Speed);
+            myDevice.MorseCode.on('Color:change', (e)=> {
+                document.getElementById("morse_colorR").value = e.Color[0];
+                document.getElementById("morse_colorG").value = e.Color[1];
+                document.getElementById("morse_colorB").value = e.Color[2];
+            });     
+            myDevice.MorseCode.on('useBuzzer:change', (e)=> document.getElementById('useBuzzer').checked = e.useBuzzer);
+            myDevice.MorseCode.on('encodedText:change', (e)=> {
+                document.getElementById('morsePlainText').value = e.PlainText;
+                document.getElementById('encodedMsgResult').value = e.EncodedText;
+            });
+            myDevice.TimeSchedule.on('Enabled:change', (e)=> console.log('Schedules enabled:',e.Enabled));
+            myDevice.TimeSchedule.on('Schedules:change', (e)=> console.log(e.Schedules));
+            myDevice.on('playingAnimation:change', (e)=> document.getElementById("playingAnimation").innerText = e.playingAnimation);
+            myDevice.on('powerConnected:change', (e)=> document.getElementById("powerConnected").checked = e.powerConnected );
+            myDevice.on('Version:change', (e)=> document.getElementById("ESPRGB-Version").innerText = e.Version);
+            myDevice.on('RSSI:change', (e)=> {
+                if (e.RSSI >= -50) document.getElementById("signalStrenght").innerText = "Excellent";
+                else if (e.RSSI < -50 && e.RSSI >= -60) document.getElementById("signalStrenght").innerText = "Good";
+                else if (e.RSSI < -60 && e.RSSI >= -70) document.getElementById("signalStrenght").innerText = "Fair";
+                else if (e.RSSI < -70) document.getElementById("signalStrenght").innerText = "Weak";
+            });
+            myDevice.on('connected:change', (e)=> document.getElementById("Connected").innerText = e.connected );
+
+        </script>
+    </body>
+</html>
