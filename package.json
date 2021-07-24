@@ -1,0 +1,22 @@
+{
+  "name": "esprgb_libjs",
+  "version": "1.0.0",
+  "description": "This is a library to create ESPRGB clients",
+  "main": "ESPRGB_LibJS.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/limiteddata/ESPRGB_LibJS.git"
+  },
+  "keywords": [
+    "ESPRGB"
+  ],
+  "author": "limiteddata",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/limiteddata/ESPRGB_LibJS/issues"
+  },
+  "homepage": "https://github.com/limiteddata/ESPRGB_LibJS#readme"
+}
