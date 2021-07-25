@@ -1,6 +1,6 @@
 {
   "name": "esprgb_libjs",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "This is a library to create ESPRGB clients",
   "main": "ESPRGB_LibJS.js",
   "scripts": {
