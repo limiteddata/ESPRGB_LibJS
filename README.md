@@ -4,6 +4,12 @@ This is a library made to simplify the development of ESPRGB clients in javascri
 
 It creates the websocket connection required, it parses all the messages, emits events when a variable changes and it includes all the function you need to change the animations and parameters.
 
+## Install with NPM
+
+```
+npm install esprgb_libjs --save
+```
+
 ## Include
 
 ```
@@ -30,4 +36,4 @@ myDevice.SolidColor.on('Color:change', (e)=>{
 myDevice.SolidColor.on('Brightness:change', (e)=> document.getElementById('SolidColor_Brightness').value = e.Brightness*100 );
 ```
 
-For more code check the demo.html 
+For more code check the demo.html
