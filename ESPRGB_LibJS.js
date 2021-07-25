@@ -587,12 +587,12 @@
          */
         Connect(){
             this.WebSocket = new WebSocket(`ws://${this.ipaddress}:${this.port}/`);
-            this.WebSocket.onopen = (e) =>{ 
+            this.WebSocket.onopen = async (e) =>{ 
                 console.log("Connected");
                 this.playingAnimation = "Connected"; 
                 this.emit(this,'connected:change', {connected:true});
-                this.Version = this.getVersion();
-                this.#RSSIInterval = setInterval(()=> this.RSSI = this.getSignalStrength(), 10000);
+                this.Version = await this.getVersion();
+                this.#RSSIInterval = setInterval(async ()=> this.RSSI = await this.getSignalStrength(), 10000);
             }
             this.WebSocket.onmessage = (event) => {
                 var data = JSON.parse(event.data);
@@ -715,19 +715,6 @@
             this.WebSocket.send(JSON.stringify({"Animations":{'powerConnected': this.powerConnected}}));
         }
         /**
-         * Gets the wifi signal strength
-         */
-        getSignalStrength(){
-            const xhr =new XMLHttpRequest();
-            xhr.open("GET",`http://${this.ipaddress}/getSignalStrenght`,false);
-            xhr.send();
-            if (xhr.status === 200) {
-                const data=JSON.parse(xhr.responseText);
-                if ("RSSI" in data) return data["RSSI"];
-            }
-            return "-70";
-        }
-        /**
          * Restarts the controler
          */
         restart(){
@@ -761,17 +748,42 @@
             }
         }
         /**
+         * Gets the wifi signal strength
+         */
+        getSignalStrength(){
+            return new Promise(async (resolve, reject) => {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET",`http://${this.ipaddress}/getSignalStrenght`,true);      
+                xhr.onload =  function () {
+                    if (this.status >= 200 && this.status < 300) {
+                        const data = JSON.parse(xhr.response);
+                        if("RSSI" in data) resolve(data.RSSI);
+                        resolve('0.0.0.0');
+                    }
+                    else reject('-70');
+                };
+                xhr.onerror = function () { reject('-70'); };    
+                xhr.send();
+            });
+        }
+        /**
          * Gets the version of the firmware from the controler
          */
-        getVersion() {
-            const xhr =new XMLHttpRequest();
-            xhr.open("GET",`http://${this.ipaddress}/getVersion`,false);
-            xhr.send();
-            if (xhr.status === 200) {
-                const data=JSON.parse(xhr.responseText);
-                if ("ESPRGB_VERSION" in data) return data["ESPRGB_VERSION"];
-            }
-            return "0.0.0.0";
+         getVersion(){
+            return new Promise(async (resolve, reject) => {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET",`http://${this.ipaddress}/getVersion`,true);      
+                xhr.onload =  function () {
+                    if (this.status >= 200 && this.status < 300) {
+                        const version = JSON.parse(xhr.response);
+                        if("ESPRGB_VERSION" in version) resolve(version.ESPRGB_VERSION);
+                        resolve('0.0.0.0');
+                    }
+                    else reject('0.0.0.0');
+                };
+                xhr.onerror = function () { reject('0.0.0.0'); };    
+                xhr.send();
+            });
         }
         emit(sender,eventType, ...args) {
             eventType = `${sender.__proto__.constructor.name}_${eventType}`;
