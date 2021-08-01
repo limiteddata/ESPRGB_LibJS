@@ -718,34 +718,28 @@
          * Restarts the controler
          */
         restart(){
-            if(confirm('Are you sure you want to restart this device?')){
-                this.Disconnect(); 
-                const xhr=new XMLHttpRequest();
-                xhr.open('GET',`http://${this.ipaddress}/restartESP`,true);
-                xhr.send();
-            }
+            this.Disconnect(); 
+            const xhr=new XMLHttpRequest();
+            xhr.open('GET',`http://${this.ipaddress}/restartESP`,true);
+            xhr.send();
         }
         /**
          * Formats the controler
          */
         format(){
-            if(confirm('Are you sure you want to format this device?')){
-                this.Disconnect(); 
-                const xhr=new XMLHttpRequest();
-                xhr.open('GET',`http://${this.ipaddress}/formatDevice`,true);
-                xhr.send();
-            }
+            this.Disconnect(); 
+            const xhr=new XMLHttpRequest();
+            xhr.open('GET',`http://${this.ipaddress}/formatDevice`,true);
+            xhr.send();
         }
         /**
          * Removes only the user data not the wifi config from controler
          */
         removeUserData(){
-            if(confirm('Are you sure you want to remove all the user data from this device?')){
-                this.Disconnect(); 
-                const xhr=new XMLHttpRequest();
-                xhr.open('GET',`http://${this.ipaddress}/removeUserData`,true);
-                xhr.send();
-            }
+            this.Disconnect(); 
+            const xhr=new XMLHttpRequest();
+            xhr.open('GET',`http://${this.ipaddress}/removeUserData`,true);
+            xhr.send();
         }
         /**
          * Gets the wifi signal strength
