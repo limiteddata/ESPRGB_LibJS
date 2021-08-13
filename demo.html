@@ -5,6 +5,11 @@
         <button onclick="myDevice.restart()">restart</button>
         <button onclick="myDevice.format()">format</button>
         <button onclick="myDevice.removeUserData()">remove user data</button>
+        <button onclick="myDevice.getCurrentConfig().then(e=>console.log(e))">getCurrentConfig</button>
+        <button onclick="myDevice.getAllWifi().then(e=>console.log(e))">getAllWifi</button>
+        <button onclick="myDevice.sendConfig(config)">sendConfig</button>
+        <input id='testPin' />
+        <button onclick="myDevice.testPin(document.getElementById('testPin').value).then(e=>console.log(e))">test pin</button>
         <p>Connected:  <b id='Connected'></b></p>
         <p>RSSI:  <b id='signalStrenght'></b></p>
         <p>Playing:  <b id='playingAnimation'></b></p>

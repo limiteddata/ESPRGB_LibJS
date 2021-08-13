@@ -505,6 +505,7 @@
             this.#events = {};
             this.#deferredEvents = {};
             this.#activeEvents = {};
+            this.usablePins = [0,1,2,3,4,5,12,13,14,15];
         }
         /**
          * Get the powerConnected variable
@@ -642,9 +643,7 @@
                 this.emit(this,'connected:change', {connected:false});
             }
             this.WebSocket.onerror = (e)=>{
-                console.log("Disconnected");
-                this.playingAnimation = "Disconnected";
-                this.emit(this,'connected:change', {connected:false});
+                this.emit(this,'connection:error', {error:e});
             }
         }
         /**
@@ -779,6 +778,54 @@
                 xhr.send();
             });
         }
+        /**
+         * Gets the current config of the esp
+         */
+        getCurrentConfig(){
+            return new Promise(async (resolve, reject) => {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET",`http://${this.ipaddress}/returnConfigData`,true);      
+                xhr.onload =  function () {
+                    resolve(JSON.parse(xhr.responseText));
+                };
+                xhr.send();
+            });
+        }     
+        /**
+         * Gets all the wifi's near the esp
+         */
+         getAllWifi(){
+            return new Promise(async (resolve, reject) => {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET",`http://${this.ipaddress}/getWifi`,true);      
+                xhr.onload =  function () {
+                    resolve(JSON.parse(xhr.responseText));
+                };
+                xhr.send();
+            });
+        } 
+        /**
+         * Tests the given pin
+         */
+        testPin(pin){
+            return new Promise(async (resolve, reject) => {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST",`http://${this.ipaddress}/pinTester`,true);
+                xhr.onload=function(){
+                    resolve(xhr.responseText);
+                }
+                xhr.send(pin);
+            });
+        }  
+        /**
+         * Sends the given config
+         * @param {object} {ESP_Config:{HOSTNAME: string, SSID:string, PASSWORD:string, REDPIN:number,GREENPIN:number,BLUEPIN:number,BUZZERPIN:number},Network_Config:{startStatic:boolean,local_IP: string,gateway: string,subnet: string,dns: string}}
+         */
+        sendConfig(config){
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST","/sendConfig",true);
+            xhr.send(JSON.stringify(config));
+        }  
         emit(sender,eventType, ...args) {
             eventType = `${sender.__proto__.constructor.name}_${eventType}`;
             const activeEvents = this.#activeEvents;
