@@ -587,10 +587,10 @@
          * Creates the websocket connection with the specified ipaddress and port 
          */
         Connect(){
+            this.emit(this,'connected:pending', {pending:true});
             this.WebSocket = new WebSocket(`ws://${this.ipaddress}:${this.port}/`);
             this.WebSocket.onopen = async (e) =>{ 
                 console.log("Connected");
-                this.playingAnimation = "Connected"; 
                 this.emit(this,'connected:change', {connected:true});
                 this.Version = await this.getVersion();
                 this.#RSSIInterval = setInterval(async ()=> this.RSSI = await this.getSignalStrength(), 10000);
@@ -639,11 +639,10 @@
             }
             this.WebSocket.onclose = (e)=>{
                 console.log("Disconnected");
-                this.playingAnimation = "Disconnected";
                 this.emit(this,'connected:change', {connected:false});
             }
             this.WebSocket.onerror = (e)=>{
-                this.emit(this,'connection:error', {error:e});
+                this.emit(this,'connected:error', {error:e});
             }
         }
         /**
