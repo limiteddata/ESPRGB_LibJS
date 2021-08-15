@@ -810,6 +810,7 @@
             return new Promise(async (resolve, reject) => {
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST",`http://${this.ipaddress}/pinTester`,true);
+                xhr.setRequestHeader('Content-type', 'text/plain');
                 xhr.onload=function(){
                     resolve(xhr.responseText);
                 }
@@ -822,7 +823,8 @@
          */
         sendConfig(config){
             var xhr = new XMLHttpRequest();
-            xhr.open("POST","/sendConfig",true);
+            xhr.open("POST",`http://${this.ipaddress}/sendConfig`,true);
+            xhr.setRequestHeader('Content-type', 'text/plain');
             xhr.send(JSON.stringify(config));
         }  
         emit(sender,eventType, ...args) {
