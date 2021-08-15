@@ -814,7 +814,7 @@
                 xhr.onload=function(){
                     resolve(xhr.responseText);
                 }
-                xhr.send(pin);
+                xhr.send(JSON.stringify(pin));
             });
         }  
         /**
